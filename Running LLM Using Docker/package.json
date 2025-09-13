@@ -2,15 +2,17 @@
   "name": "runnig_llm_locally",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev":"tsc -b && node dist/index.js"
+    "dev": "tsc -b && node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
+    "openai": "^5.20.2",
     "typescript": "^5.9.2"
   }
 }
