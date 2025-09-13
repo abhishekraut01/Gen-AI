@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev":"tsc -b && node dist/index.js"
+    "dev": "tsc -b && node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,10 +13,12 @@
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
     "dotenv": "^17.2.2",
-    "openai": "^5.20.2"
+    "openai": "^5.20.2",
+    "readline-sync": "^1.4.10"
   },
   "devDependencies": {
     "@types/node": "^24.3.3",
+    "@types/readline-sync": "^1.4.8",
     "typescript": "^5.9.2"
   }
 }
