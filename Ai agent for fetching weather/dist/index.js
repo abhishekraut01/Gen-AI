@@ -26,9 +26,18 @@ After receiving weather data, respond with ONLY a JSON object in this format:
   "city": "city-name", 
   "output": "your response including the weather information"
 }
+
+othervise chat normally like chatbot and assistent
+and give response in this JSON formate
+
+ {
+  needFuntionCall: false,
+  output: 'Hello! How can I assist you today?'
+}
+
 `;
 async function main() {
-    const userPrompt = readlineSync.question("<< ");
+    const userPrompt = readlineSync.question("How can i help you today <<");
     let messageHistory = [
         { role: "system", content: system_prompt },
         { role: "user", content: userPrompt }
@@ -51,6 +60,7 @@ async function main() {
     while (true) {
         if (call.needFuntionCall) {
             // Fetch weather data
+            console.log("calling tool for weather");
             const weatherTemp = await fetchWeather(call.city);
             // Add the weather result to message history
             messageHistory.push({
