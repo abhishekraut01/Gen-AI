@@ -2,8 +2,10 @@ import OpenAI from "openai";
 import dotenv from 'dotenv';
 import readlineSync from "readline-sync";
 dotenv.config();
+// Configure OpenAI client for Gemini API
 const client = new OpenAI({
-    apiKey: process.env.GEMINI_API_KEY
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
 });
 async function fetchWeather(city) {
     const res = await fetch(`http://api.weatherapi.com/v1/current.json?key=${process.env.WEATHER_API_KEY}&q=${city}&aqi=no`);
