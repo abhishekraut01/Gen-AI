@@ -31,44 +31,58 @@ After receiving weather data, respond with ONLY a JSON object in this format:
   "output": "your response including the weather information"
 }
 
-othervise chat normally like chatbot and assistent
-and give response in this JSON formate
+otherwise chat normally like chatbot and assistant
+and give response in this JSON format
 
- {
-  needFuntionCall: false,
-  output: 'Hello! How can I assist you today?'
+{
+  "needFuntionCall": false,
+  "output": "your response here"
 }
-
 `;
 
 async function main() {
-    const userPrompt = readlineSync.question("How can i help you today <<");
-
+    console.log("Chat started! Type 'quit', 'exit', or 'bye' to end the conversation.");
+    
+    // Initialize message history with system prompt
     let messageHistory: any[] = [
-        { role: "system", content: system_prompt },
-        { role: "user", content: userPrompt }
+        { role: "system", content: system_prompt }
     ];
 
-    // Initial AI response
-    let response = await client.chat.completions.create({
-        model: "gemini-2.5-flash",
-        messages: messageHistory,
-        response_format: { type: "json_object" }
-    });
-
-    let call;
-    try {
-        call = JSON.parse(response.choices[0]?.message?.content || "{}");
-    } catch (err) {
-        console.error("Failed to parse AI response as JSON:", err);
-        console.log("AI response:", response.choices[0]?.message?.content);
-        return;
-    }
-
+    // Main conversation loop
     while (true) {
-        if (call.needFuntionCall) {
-            // Fetch weather data
-            console.log("calling tool for weather")
+        // Get user input
+        const userPrompt = readlineSync.question("\nYou: ");
+        
+        // Check for exit commands
+        if (userPrompt.toLowerCase().trim() === 'quit' || 
+            userPrompt.toLowerCase().trim() === 'exit' || 
+            userPrompt.toLowerCase().trim() === 'bye') {
+            console.log("Assistant: Goodbye! Have a great day!");
+            break;
+        }
+
+        // Add user message to history
+        messageHistory.push({ role: "user", content: userPrompt });
+
+        // Get initial AI response
+        let response = await client.chat.completions.create({
+            model: "gemini-2.5-flash",
+            messages: messageHistory,
+            response_format: { type: "json_object" }
+        });
+
+        let call;
+        try {
+            call = JSON.parse(response.choices[0]?.message?.content || "{}");
+        } catch (err) {
+            console.error("Failed to parse AI response as JSON:", err);
+            console.log("AI response:", response.choices[0]?.message?.content);
+            continue; // Continue the conversation instead of returning
+        }
+
+        // Handle function calls (weather in this case)
+        while (call.needFuntionCall) {
+            console.log("🌤️  Fetching weather data...");
             const weatherTemp = await fetchWeather(call.city);
             
             // Add the weather result to message history
@@ -89,12 +103,16 @@ async function main() {
             } catch (err) {
                 console.error("Failed to parse AI response as JSON:", err);
                 console.log("AI response:", response.choices[0]?.message?.content);
-                return;
+                break;
             }
-        } else {
-            // Output final answer and break
+        }
+
+        // Output the assistant's response
+        if (call.output) {
             console.log("Assistant:", call.output);
-            break
+            
+            // Add assistant's response to message history for context
+            messageHistory.push({ role: "assistant", content: call.output });
         }
     }
 }
