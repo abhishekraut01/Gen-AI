@@ -12,9 +12,11 @@
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
+    "dotenv": "^17.2.2",
     "openai": "^5.20.2"
   },
   "devDependencies": {
+    "@types/node": "^24.3.3",
     "typescript": "^5.9.2"
   }
 }
