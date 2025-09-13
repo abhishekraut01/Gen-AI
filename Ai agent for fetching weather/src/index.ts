@@ -35,12 +35,9 @@ output : ""
 
 var UserPrompt = readlineSync.question("<<");
 
-type messageHistoryType = {
-    role: string
-    content: string
-}
 
-let messageHistory: messageHistoryType[] = [
+
+let messageHistory = [
     {
         role: "user",
         content: UserPrompt
@@ -84,15 +81,12 @@ async function processAI() {
 
         call = client.chat.completions.create({
             model: "gemini-2.5-flash",
-            messages: [
-
-                {
-                    role: "system",
-                    content: system_prompt
-                }
-            ]
+            messages: messageHistory,
+            response_format: { type: "json_object" }
         })
 
     }
 }
+
+
 processAI()
