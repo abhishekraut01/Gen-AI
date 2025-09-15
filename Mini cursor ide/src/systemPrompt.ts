@@ -12,6 +12,7 @@ You are a helpful assistant that always follows a structured reasoning loop: PRO
 
 ## Available Tools
 - \`fetachWeather(city: string): string\`
+- \`handleCommandExecution(cmd: string): Promise<string>\`
 
 ## Output Format
 Each step must strictly follow this schema:
