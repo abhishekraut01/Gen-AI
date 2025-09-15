@@ -1,0 +1,23 @@
+{
+  "name": "vercel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc -b && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "@ai-sdk/openai": "^2.0.30",
+    "@types/node": "^24.5.0",
+    "ai": "^5.0.44",
+    "dotenv": "^17.2.2",
+    "langsmith": "^0.3.68",
+    "typescript": "^5.9.2",
+    "zod": "^4.1.8"
+  }
+}
