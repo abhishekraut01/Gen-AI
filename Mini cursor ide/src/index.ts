@@ -8,8 +8,12 @@ const client = new OpenAI({
     baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
 })
 
-function fetachWeather(city: string) {
+function fetachWeather(city: string): string {
     return `weather for ${city} is 69 degree `
+}
+
+const AvailableTools = {
+    "fetachWeather": fetachWeather
 }
 
 const systemPrompt = `
@@ -49,8 +53,6 @@ Steps:
 { "step": "output", "content": "Hey bro, today's weather in Nagpur is 69 degrees — pretty hot, take care!" }
 `;
 
-const userPrompt = readlineSync.question("\nYou: ");
-
 
 async function main() {
 
@@ -58,18 +60,90 @@ async function main() {
         { role: "system", content: systemPrompt }
     ];
 
+    while (true) {
 
-    const response = await client.chat.completions.create({
-        model: "gemini-2.0-flash",
-        messages: [
-            {
-                role: "user",
-                content: userPrompt
+        const userPrompt = readlineSync.question("\nYou: ");
+
+        if (userPrompt.toLocaleLowerCase() === "exit") {
+            break
+        }
+
+        messageHistory.push({ role: "user", content: userPrompt });
+
+        while (true) {
+
+            let response = await client.chat.completions.create({
+                model: "gemini-2.0-flash",
+                messages: messageHistory,
+                response_format: { type: "json_object" }
+            })
+
+            let parsedData;
+
+            try {
+                parsedData = JSON.parse(response.choices[0]?.message?.content || "{}");
+            } catch (error) {
+                console.error("Failed to parse AI response as JSON:", error);
+                console.log("AI response:", response.choices[0]?.message?.content);
+                continue;
             }
-        ]
-    })
 
+            if (parsedData.step && parsedData.step === "process") {
+                messageHistory.push({
+                    role: "assistant",
+                    content: JSON.stringify(parsedData)
+                })
+
+                continue
+            }
+
+            if (parsedData.step && parsedData.step === "think") {
+                messageHistory.push({
+                    role: "assistant",
+                    content: JSON.stringify(parsedData)
+                })
+
+                continue
+            }
+
+            if (parsedData.step && parsedData.step === "observe") {
+                messageHistory.push({
+                    role: "assistant",
+                    content: JSON.stringify(parsedData)
+                })
+
+                continue
+            }
+
+            if (parsedData.step && parsedData.step === "action") {
+                let res
+                const tool = parsedData.tool
+                const inputData = parsedData.input
+
+                if (tool && tool in AvailableTools) {
+                    res = AvailableTools[tool as keyof typeof AvailableTools](inputData);
+                } else {
+                    res = "Tool not found";
+                }
+
+                messageHistory.push({
+                    role: "user",
+                    content: res
+                })
+
+                continue
+            }
+
+            if (parsedData.step && parsedData.step === "output") {
+                console.log(parsedData.content)
+                break
+            }
+        }
+
+    }
 
 }
 
-main()
+main().catch((err) => {
+    console.log(err)
+}) 
