@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import dotenv from 'dotenv';
-import { exec } from "child_process";
+import { execSync } from "node:child_process";
 import readlineSync from 'readline-sync';
 import { systemPrompt } from "./systemPrompt.js";
 dotenv.config()
@@ -14,19 +14,14 @@ function fetachWeather(city: string): string {
     return `weather for ${city} is 69 degree `
 }
 
-async function handleCommandExecution(cmd: string) {
-    exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`Stderr: ${stderr}`);
-            return;
-        }
-        console.log(`Output:\n${stdout}`);
-    });
-}
+function handleCommandExecution(cmd: string): string {
+  try {
+    const output = execSync(cmd, { encoding: "utf-8" });
+    return output.trim();
+  } catch (error: any) {
+    throw new Error(`Command failed: ${error.message}`);
+  }
+} 
 
 const AvailableTools = {
     "fetachWeather": fetachWeather,
