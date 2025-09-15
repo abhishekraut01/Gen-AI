@@ -12,12 +12,14 @@
   "license": "ISC",
   "packageManager": "pnpm@10.12.4",
   "devDependencies": {
+    "@types/readline-sync": "^1.4.8",
     "typescript": "^5.9.2"
   },
   "dependencies": {
     "@types/dotenv": "^8.2.3",
     "@types/node": "^24.4.0",
     "dotenv": "^17.2.2",
-    "openai": "^5.20.2"
+    "openai": "^5.20.2",
+    "readline-sync": "^1.4.10"
   }
 }

@@ -1,6 +1,6 @@
 import OpenAI from "openai";
-import dotenv from 'dotenv'
-
+import dotenv from 'dotenv';
+import readlineSync from 'readline-sync';
 dotenv.config()
 
 const client = new OpenAI({
@@ -49,19 +49,27 @@ Steps:
 { "step": "output", "content": "Hey bro, today's weather in Nagpur is 69 degrees — pretty hot, take care!" }
 `;
 
+const userPrompt = readlineSync.question("\nYou: ");
+
 
 async function main() {
+
+    let messageHistory: any[] = [
+        { role: "system", content: systemPrompt }
+    ];
+
+
     const response = await client.chat.completions.create({
         model: "gemini-2.0-flash",
         messages: [
             {
                 role: "user",
-                content: "hey how are you"
+                content: userPrompt
             }
         ]
     })
 
-    console.log(response.choices[0]?.message.content)
+
 }
 
 main()
