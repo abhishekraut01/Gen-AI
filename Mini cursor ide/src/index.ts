@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import dotenv from 'dotenv';
-import { execSync } from "node:child_process";
+import { exec } from "node:child_process";
 import readlineSync from 'readline-sync';
 import { systemPrompt } from "./systemPrompt.js";
 dotenv.config()
@@ -14,18 +14,20 @@ function fetachWeather(city: string): string {
     return `weather for ${city} is 69 degree `
 }
 
-function handleCommandExecution(cmd: string): string {
-  try {
-    const output = execSync(cmd, { encoding: "utf-8" });
-    return output.trim();
-  } catch (error: any) {
-    throw new Error(`Command failed: ${error.message}`);
-  }
-} 
+function handleCommandExecution(command: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    exec(command, (err, stdout, stderr) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(`stdout: ${stdout}\nstderr: ${stderr}`);
+    });
+  });
+}
 
 const AvailableTools = {
     "fetachWeather": fetachWeather,
-    "handleCommandExecution":handleCommandExecution
+    "handleCommandExecution": handleCommandExecution
 }
 
 async function main() {
@@ -88,7 +90,7 @@ async function main() {
                 const inputData = parsedData.input
 
                 if (tool && tool in AvailableTools) {
-                    res = AvailableTools[tool as keyof typeof AvailableTools](inputData);
+                    res = await AvailableTools[tool as keyof typeof AvailableTools](inputData);
                 } else {
                     res = "Tool not found";
                 }
