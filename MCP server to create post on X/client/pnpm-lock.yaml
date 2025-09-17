@@ -11,6 +11,9 @@ importers:
       '@google/genai':
         specifier: ^1.20.0
         version: 1.20.0(@modelcontextprotocol/sdk@1.18.0)
+      '@google/generative-ai':
+        specifier: ^0.24.1
+        version: 0.24.1
       '@modelcontextprotocol/sdk':
         specifier: ^1.18.0
         version: 1.18.0
@@ -41,6 +44,10 @@ packages:
     peerDependenciesMeta:
       '@modelcontextprotocol/sdk':
         optional: true
+
+  '@google/generative-ai@0.24.1':
+    resolution: {integrity: sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q==}
+    engines: {node: '>=18.0.0'}
 
   '@modelcontextprotocol/sdk@1.18.0':
     resolution: {integrity: sha512-JvKyB6YwS3quM+88JPR0axeRgvdDu3Pv6mdZUy+w4qVkCzGgumb9bXG/TmtDRQv+671yaofVfXSQmFLlWU5qPQ==}
@@ -506,6 +513,8 @@ snapshots:
       - encoding
       - supports-color
       - utf-8-validate
+
+  '@google/generative-ai@0.24.1': {}
 
   '@modelcontextprotocol/sdk@1.18.0':
     dependencies:
