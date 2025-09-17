@@ -1,12 +1,19 @@
 import { GoogleGenAI } from "@google/genai";
 import dotenv from 'dotenv'
 import readline from "readline/promises";
+import { Client } from "@modelcontextprotocol/sdk/client";
+
 dotenv.config()
 const ai = new GoogleGenAI({});
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
+})
+
+const mcpClient = new Client({
+    name:"XTweetBot",
+    version:"1.0.0"
 })
 
 interface chatHistoryI {

@@ -3,10 +3,17 @@ import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js"
-
-
-
+import cors from 'cors';
 const app = express();
+
+app.use(cors({
+    origin: '*', 
+    // origin: ['https://your-remote-domain.com', 'https://your-other-remote-domain.com'],
+    exposedHeaders: ['Mcp-Session-Id'],
+    allowedHeaders: ['Content-Type', 'mcp-session-id'],
+}));
+
+
 app.use(express.json());
 
 // Map to store transports by session ID
@@ -80,4 +87,6 @@ app.get('/mcp', handleSessionRequest);
 // Handle DELETE requests for session termination
 app.delete('/mcp', handleSessionRequest);
 
-app.listen(3000);
+app.listen(3001, () => {
+    console.log('server is running on port 3000')
+});
