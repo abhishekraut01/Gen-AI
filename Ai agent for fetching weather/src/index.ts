@@ -54,8 +54,7 @@ async function main() {
         const userPrompt = readlineSync.question("\nYou: ");
         
         // Check for exit commands
-        if (userPrompt.toLowerCase().trim() === 'quit' || 
-            userPrompt.toLowerCase().trim() === 'exit' || 
+        if (userPrompt.toLowerCase().trim() === 'quit' || userPrompt.toLowerCase().trim() === 'exit' || 
             userPrompt.toLowerCase().trim() === 'bye') {
             console.log("Assistant: Goodbye! Have a great day!");
             break;
